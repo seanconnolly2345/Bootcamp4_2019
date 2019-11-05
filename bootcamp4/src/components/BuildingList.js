@@ -1,10 +1,11 @@
 import React from 'react';
 
+
 class BuilingList extends React.Component {
-	tappedBuilding = (building) => {
+	selectedBuilding = (building) => {
 		var selectedUpdate = this.props.selectedUpdate;
 		//console.log(building.name + ' ID: ' + building.id);
-		selectedUpdate(building.id);
+		selectedUpdate(building.id - 1);
 	}
 	
 	render() {
@@ -17,9 +18,9 @@ class BuilingList extends React.Component {
 		})
 		.map(directory => {
 			return (
-				<tr key={directory.id}>
+				<tr key={directory.id }>
 					<td>{directory.code} </td>
-					<td onClick={()=>this.tappedBuilding(directory)}> {directory.name} </td>
+					<td onClick={(e)=>this.selectedBuilding(directory )}> {directory.name} </td>
 				</tr>
 			);
 		});

@@ -3,13 +3,16 @@ import Search from './components/Search';
 import ViewBuilding from './components/ViewBuilding';
 import BuildingList from './components/BuildingList';
 import Credit from './components/Credit';
+import AddBuilding from './components/AddBuilding';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      listings: this.props.data,
       filterText: '',
-      selectedBuilding: 0
+      selectedBuilding: 0,
+      addBuildingFormOpen: false
     };
   }
 
@@ -24,6 +27,30 @@ class App extends React.Component {
       selectedBuilding: id
   })
   }
+  
+  removeSelectedBuilding() {
+		var listings = this.state.listings.filter(listing => {return listing.id !== this.state.selectedBuilding})
+    this.setState({
+      listings: listings
+    })
+  }
+  addBuilding(building) {
+    // set the new building's id to the last building's id + 1
+    building.id = this.state.listings[this.state.listings.length - 1].id + 1;
+    var listings = [...this.state.listings, building]
+    this.setState({
+      listings: listings,
+      selectedBuilding: building.id,
+      addBuildingFormOpen: false
+    })
+  }
+
+  formOpenUpdate(value) {
+    this.setState({
+      addBuildingFormOpen: value
+    })
+  }
+
 
   render() {
     
@@ -39,7 +66,7 @@ class App extends React.Component {
           <div className="row">
             <div className="column1">
               <div className="tableWrapper">
-                <table className="table table-striped table-hover">
+              <table className="table table-striped table-hover">
                   <tr>
                     <td>
                       <b>Code Building</b>
@@ -49,15 +76,30 @@ class App extends React.Component {
                     data={this.props.data}
                     filterText={this.state.filterText}
                     selectedUpdate={this.selectedUpdate.bind(this)}
+                    //removeBuilding={this.removeBuilding.bind(this)}
                   />
-                </table>
+                  
+               </table>
               </div>
             </div>
             <div className="column2">
+            <div className="card">
             <ViewBuilding
                 data={this.props.data}
+                selectedBuilding={this.state.selectedBuilding}
                 building={this.state.selectedBuilding}
+                listings={this.state.listings}
+                removeBuilding={this.removeSelectedBuilding.bind(this)}
               />
+              </div>
+              <div className="card">
+                <AddBuilding 
+                  addBuilding={this.addBuilding.bind(this)} 
+                  formOpen={this.state.addBuildingFormOpen} 
+                  formOpenUpdate={this.formOpenUpdate.bind(this)}
+                />
+                </div>
+              
             </div>
           </div>
           <Credit />
