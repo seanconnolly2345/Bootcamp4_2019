@@ -6,7 +6,7 @@ onSubmit(v) {
 	v.preventDefault();
 	const building_id = this.props.selectedBuilding;
 	const { data } = this.props;
-	let idx = data.findIndex(x => x.id === building_id);
+	let idx = data.findIndex(x => x.id === building_id + 1);
 
 	this.props.removeData(idx);
 }
