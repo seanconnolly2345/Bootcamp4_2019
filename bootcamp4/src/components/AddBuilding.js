@@ -1,106 +1,76 @@
 import React from 'react';
 
 class AddBuilding extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			error: ''
+		constructor (props) {
+				super(props);
+				this.state = {
+						name: '',
+						address: '',
+						latitude: '',
+						longitude: '',
+						code: ''
+				};
 		}
-	}
 
-	formOpenUpdate() {
-		this.props.formOpenUpdate(!this.props.formOpen)
-	}
-	addBuilding() {
-		if (this.code.value === '' && this.name.value === '')
-			this.setState({
-				error: 'Enter a code and a name'
-			})
-		else if (this.code.value === '' && this.name.value !== '')
-			this.setState({
-				error: 'Enter a code'
-			})
-		else if (this.name.value === '')
-			this.setState({
-				error: 'Enter a name'
-			})
-		else {
-			this.setState({
-				error: ''
-			})
-			var listing = {
-				code: this.code.value.toUpperCase(),
-				name: this.name.value
-			}
-			if (this.latitude.value !== '' && this.longitude.value !== '')
-				listing.coordinates = {
-					latitude: this.latitude.value,
-					longitude: this.longitude.value
+		modify(val) {
+				this.setState({[val.target.name]: val.target.value});
+		}
+
+		onSubmit(v) {
+				v.preventDefault();
+
+				const { data } = this.props;
+
+				const newdata = data[data.length - 1];
+				const newid = newdata.id;
+
+				const building = {
+						id: newid+1,
+						name: this.state.name,
+						code: this.state.code,
+						address: this.state.address,
+						coordinates: {
+								latitude: this.state.latitude,
+								longitude: this.state.longitude
+						}
 				}
-			if (this.address.value !== '')
-				listing.address = this.address.value
 
-			this.props.addBuilding(listing)
+				
 
-			this.formOpenUpdate()
+				this.props.updateData(building);
 		}
-	}
+
 	render() {
-		const { formOpen } = this.props
-		if (formOpen) {
-			return (
-				<div>
-					<h4>New Building Details</h4>
-					<p>{this.state.error}</p>
-					<form className="addBuildingForm">
-						<table>
-							<tr>
-								<td>
-									Code:
-								</td>
-								<td>
-									<input type="text" ref={value => this.code = value}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Name:
-								</td>
-								<td>
-									<input type="text" ref={value => this.name = value}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Latitude:
-								</td>
-								<td>
-									<input type="text" ref={value => this.latitude = value}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Longitude:
-								</td>
-								<td>
-									<input type="text" ref={value => this.longitude = value}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Address:
-								</td>
-								<td>
-									<input type="text" ref={value => this.address = value}/>
-								</td>
-							</tr>
-						</table>
-					</form>
-					<button onClick={this.addBuilding.bind(this)}>Submit</button>
-				</div>
-			);
-		}
-		return(<button onClick={this.formOpenUpdate.bind(this)}>Add Building</button>)
+		return (
+			<form>
+				<label>
+					Name: 
+					<input name="name" value={this.state.name} onChange={val => this.modify(val)}/>
+				</label>
+				<br />
+				<label>
+					Address: 
+					<input name="address" value={this.state.address} onChange={val => this.modify(val)}/>
+				</label>
+				<br />
+				<label>
+					Code: 
+					<input name="code" value={this.state.code} onChange={val => this.modify(val)}/>
+				</label>
+				<br />
+				<label>
+					Latitude:
+					<input name="latitude" value={this.state.latitude} onChange={val => this.modify(val)}/>
+				</label>
+				<br />
+				<label>
+					Longitude:
+					<input name="longitude" value={this.state.longitude} onChange={val => this.modify(val)}/>
+				</label>
+				<br />
+				<button onClick={(v) => this.onSubmit(v)}>Send</button>
+			</form>
+		);
 	}
 }
 export default AddBuilding;

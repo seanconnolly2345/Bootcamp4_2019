@@ -4,6 +4,7 @@ import ViewBuilding from './components/ViewBuilding';
 import BuildingList from './components/BuildingList';
 import Credit from './components/Credit';
 import AddBuilding from './components/AddBuilding';
+import RemoveBuilding from './components/RemoveBuilding';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class App extends React.Component {
       listings: this.props.data,
       filterText: '',
       selectedBuilding: 0,
-      addBuildingFormOpen: false
+      data: this.props.data
     };
   }
 
@@ -34,22 +35,20 @@ class App extends React.Component {
       listings: listings
     })
   }
-  addBuilding(building) {
-    // set the new building's id to the last building's id + 1
-    building.id = this.state.listings[this.state.listings.length - 1].id + 1;
-    var listings = [...this.state.listings, building]
-    this.setState({
-      listings: listings,
-      selectedBuilding: building.id,
-      addBuildingFormOpen: false
-    })
-  }
 
-  formOpenUpdate(value) {
-    this.setState({
-      addBuildingFormOpen: value
-    })
-  }
+
+
+  updateData(building) {
+    let local_data = this.state.data;
+    local_data.push(building);
+    this.setState({data: local_data});
+}
+
+removeData(building_id) {
+    let local_data = this.state.data;
+    local_data.splice(building_id, 1);
+    this.setState({data: local_data});
+}
 
 
   render() {
@@ -76,7 +75,7 @@ class App extends React.Component {
                     data={this.props.data}
                     filterText={this.state.filterText}
                     selectedUpdate={this.selectedUpdate.bind(this)}
-                    //removeBuilding={this.removeBuilding.bind(this)}
+                    
                   />
                   
                </table>
@@ -89,15 +88,19 @@ class App extends React.Component {
                 selectedBuilding={this.state.selectedBuilding}
                 building={this.state.selectedBuilding}
                 listings={this.state.listings}
-                removeBuilding={this.removeSelectedBuilding.bind(this)}
+                
               />
+              <RemoveBuilding
+				selectedBuilding={this.state.selectedBuilding}
+				removeData={this.removeData.bind(this)}
+				data={this.state.data}
+			  />
               </div>
               <div className="card">
-                <AddBuilding 
-                  addBuilding={this.addBuilding.bind(this)} 
-                  formOpen={this.state.addBuildingFormOpen} 
-                  formOpenUpdate={this.formOpenUpdate.bind(this)}
-                />
+              <AddBuilding
+			    updateData={this.updateData.bind(this)}
+			    data={this.state.data}
+		    />
                 </div>
               
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import RemoveBuilding from './RemoveBuilding';
+
 
 class ViewBuilding extends React.Component {
 	
@@ -8,7 +8,7 @@ class ViewBuilding extends React.Component {
 		var tmp = data[building];
 		let coordinates, top, id;
 
-		// check if listing is valid
+		
 		try {
 			top = <div>
 				<tr>CODE: {tmp.code}</tr>
@@ -26,7 +26,6 @@ class ViewBuilding extends React.Component {
 		}
 
 
-		// check if coordinates is valid
 		try {
 			coordinates = <div>
 				<tr>LAT: {tmp.coordinates["latitude"]}</tr>
@@ -49,7 +48,7 @@ class ViewBuilding extends React.Component {
 							{coordinates}
 						</tr>
 					</p>
-					<RemoveBuilding removeBuilding={removeBuilding} />
+					
 			</div>
 		);
 	}
